@@ -1,0 +1,291 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "The World Data API",
+        "description": "This service supplies data about the cities of the world.",
+        "version": "1.0.0",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "email": "apiteam@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://localhost"
+        }
+    ],
+    "basePath": "/api",
+    "tags": [
+        {
+            "name": "query",
+            "description": "Retrieving information about cities"
+        },
+        {
+            "name": "update",
+            "description": "Updating information about cities"
+        }
+    ],
+    "paths": {
+        "/api/city": {
+            "get": {
+                "tags": [
+                    "query"
+                ],
+                "summary": "Get a list of all cities and their districts",
+                "description": "",
+                "operationId": "listCities",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "boolean",
+                                    "description": "\"false\""
+                                },
+                                "Message": {
+                                    "type": "string",
+                                    "description": "\"success\""
+                                },
+                                "City": {
+                                    "type": "array",
+                                    "items": {
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Name of the city"
+                                        },
+                                        "district": {
+                                            "type": "string",
+                                            "description": "Name of the district the city is in"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error in MySQL query",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "boolean",
+                                    "description": "\"true\""
+                                },
+                                "Message": {
+                                    "type": "string",
+                                    "description": "\"Error in MySQL query\""
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/city/{CountryCode}": {
+            "get": {
+                "tags": [
+                    "query"
+                ],
+                "summary": "Get a list of all cities in the given country",
+                "description": "",
+                "operationId": "listCitiesInCountry",
+                "parameters": [
+                    {
+                        "name": "CountryCode",
+                        "in": "path",
+                        "description": "Three letter country code",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "boolean",
+                                    "description": "\"false\""
+                                },
+                                "Message": {
+                                    "type": "string",
+                                    "description": "\"success\""
+                                },
+                                "Cities": {
+                                    "type": "array",
+                                    "items": {
+                                        "ID": {
+                                            "type": "integer",
+                                            "description": "City's unique identifier"
+                                        },
+                                        "Name": {
+                                            "type": "string",
+                                            "description": "Name of the city"
+                                        },
+                                        "CountryCode": {
+                                            "type": "string",
+                                            "description": "Three-letter country code of the country the city is in"
+                                        },
+                                        "District": {
+                                            "type": "string",
+                                            "description": "Name of the district the city is in"
+                                        },
+                                        "Population": {
+                                            "type": "integer",
+                                            "description": "Population of the city"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error in MySQL query",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "boolean",
+                                    "description": "\"true\""
+                                },
+                                "Message": {
+                                    "type": "string",
+                                    "description": "\"Error in MySQL query\""
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/update": {
+            "post": {
+                "tags": [
+                    "update"
+                ],
+                "summary": "Update the population of the given city in the given country",
+                "description": "",
+                "operationId": "updatePopulation",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "City": {
+                                        "type": "string",
+                                        "description": "Name of the city"
+                                    },
+                                    "CountryCode": {
+                                        "type": "string",
+                                        "description": "Three letter country code"
+                                    },
+                                    "Pop": {
+                                        "type": "integer",
+                                        "description": "New population count"
+                                    }
+                                },
+                                "required": [
+                                    "City",
+                                    "CountryCode",
+                                    "Pop"
+                                ]
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "City": {
+                                        "type": "string",
+                                        "description": "Name of the city"
+                                    },
+                                    "CountryCode": {
+                                        "type": "string",
+                                        "description": "Three letter country code"
+                                    },
+                                    "Pop": {
+                                        "type": "integer",
+                                        "description": "New population count"
+                                    }
+                                },
+                                "required": [
+                                    "City",
+                                    "CountryCode",
+                                    "Pop"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "boolean",
+                                    "description": "\"false\""
+                                },
+                                "Message": {
+                                    "type": "string",
+                                    "description": "Message indicating the city name and updated population"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing parameter",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "boolean",
+                                    "description": "\"true\""
+                                },
+                                "Message": {
+                                    "type": "string",
+                                    "description": "\"Missing parameter\""
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error in MySQL query",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "boolean",
+                                    "description": "\"true\""
+                                },
+                                "Message": {
+                                    "type": "string",
+                                    "description": "\"Error in MySQL query\""
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
